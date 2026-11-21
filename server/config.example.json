@@ -1,0 +1,8 @@
+{
+    "ytdlp2strm_host" : "CHANGE-ME-the-LAN-address-of-this-machine",
+    "ytdlp2strm_port" : "5005",
+    "ytdlp2strm_keep_old_strm" : "False",
+    "ytdlp2strm_temp_file_duration" : "3600",
+    "ytdlp2strm_web_username": "CHANGE-ME-required-make-up-a-user-name",
+    "ytdlp2strm_web_password": "CHANGE-ME-required-a-long-random-password"
+}

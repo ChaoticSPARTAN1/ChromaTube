@@ -1,0 +1,3 @@
+[
+    {"every" : "hours", "qty" : "6", "at" : "", "timezone": "", "do" : ["--media", "youtube", "--params", "direct"]}
+]

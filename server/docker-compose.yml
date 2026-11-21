@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ChromaTube server side: ytdlp2STRM (MIT, https://github.com/fe80Grau/ytdlp2STRM), not included here: Docker
+# downloads the image below from Docker Hub when you start it. This file and the .json templates are ChromaTube's.
+#
+# What it does: lists the channels in channel_list.json as small .strm files (one folder per channel) in the
+# ChromaTube folder, and fetches a video only when Jellyfin plays it. Nothing is downloaded or kept.
+#
+# Before you start it (docs/Server-setup.md), in a copy of this folder OUTSIDE the cloned repository:
+#   1. make config.json with its REQUIRED page sign-in (py -3 tools/make_server_config.py does it, with a random
+#      user name and password), or copy config.example.json and replace every CHANGE-ME;
+#   2. copy .env.example to .env and set the folder in it;
+#   3. put your channels into channel_list.json (start from channel_list.example.json);
+#   4. allow port 5005 on this machine's firewall from your Jellyfin server only (required); allow your PC only while
+#      you check it, then remove that rule. The firewall is the real protection: the page sign-in guards only the
+#      settings pages; the tool's command channel has no sign-in and can start programs inside the container
+#      (docs/Security.md).
+# The settings files are mounted read-only: edit them on this machine, then restart the container.
+# Start:   docker compose -p chromatube up -d          (or paste it as a project in your NAS's Docker app)
+# Remove:  docker compose -p chromatube down -v        then delete this folder and the ChromaTube folder.
+name: chromatube
+services:
+  ytdlp2strm:
+    # Pinned by digest: it cannot change by itself. Update only on purpose (docs/Updating.md).
+    # This digest is the "latest" build of 2026-10-25 (upstream commit 7d4a047), the image the project tested; it is
+    # not a release tag. If the publisher ever prunes untagged images it may stop being pullable: then choose a newer
+    # digest on purpose (docs/Updating.md).
+    image: fe80grau/ytdlp2strm@sha256:2757a5e7293d7e885d5dc057b26a9e8cb9b5a5b2a6affe6a3e9f7f8c5fb9ec7c
+    container_name: chromatube-ytdlp2strm
+    # This version of the tool listens only on the address written in config.json, so it uses the host's
+    # own network; with Docker's default bridge network its page cannot be reached. The address you give
+    # it must be the server's LAN address (never 0.0.0.0), and port 5005 must stay closed to the internet
+    # (no port forward on your router; firewall: allow it from your Jellyfin server only, your PC only while checking).
+    network_mode: host
+    environment:
+      - AM_I_IN_A_DOCKER_CONTAINER=Yes
+      - DOCKER_PORT=5005
+    volumes:
+      # The ONE folder the tool writes into. Jellyfin must see the same folder, outside every library folder.
+      - ${CHROMATUBE_LIST_FOLDER:?set CHROMATUBE_LIST_FOLDER in .env}:/media/ChromaTube
+      # Its own working files (cache, logs); nothing of Jellyfin's.
+      - chromatube-data:/opt/ytdlp2STRM
+      # Settings: these four files, next to this one, READ-ONLY: the tool's page cannot change them (or its sign-in).
+      # To change a setting or your channels, edit the file on this machine, then: docker compose -p chromatube restart
+      - ./config.json:/opt/ytdlp2STRM/config/config.json:ro
+      - ./crons.json:/opt/ytdlp2STRM/config/crons.json:ro
+      - ./yt_config.json:/opt/ytdlp2STRM/plugins/youtube/config.json:ro
+      - ./channel_list.json:/opt/ytdlp2STRM/plugins/youtube/channel_list.json:ro
+    restart: unless-stopped
+    # Small on purpose: it lists channels and hands Jellyfin one video address at a time.
+    mem_limit: 1g
+    cpus: 1.5
+    pids_limit: 256
+    # No privilege escalation. (Dropping Linux capabilities is optional extra hardening that was not tested with this
+    # image and can stop it reading its settings; see docs/Security.md.)
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  chromatube-data:

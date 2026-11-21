@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+__pycache__/
+*.pyc
+
+# Anything personal (normally in %LOCALAPPDATA%\ChromaTube, never here)
+/private/
+jellyfin-connection.txt
+*.local.txt
+.env
+.env.*
+!server/.env.example
+
+# Your own copies of the server settings (the templates are server/*.example.* and the shipped .json files):
+# config.json holds the tool's page sign-in and must never be committed
+server/config.json
+config.json
+server/channel_list.json
+cookies*.txt
+*.strm
+media/
+
+# Backups, records and logs of the tools
+before-*.json
+state.json
+*.log
+
+# Temporary print page of the PDF guide (build_docs_pdf.py deletes it)
+/.guide-print.html

@@ -1,0 +1,27 @@
+ChromaTube
+Copyright (C) 2026 ChaoticSPARTAN1
+
+ChromaTube is free software: you can redistribute it and/or modify it under the terms of the GNU General
+Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version, with the additional terms in ADDITIONAL-TERMS.md (GPLv3 section 7).
+It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See LICENSE.
+
+ChromaTube is an independent project, not affiliated with or endorsed by YouTube or Google, ModRetro, Analogue or
+the Jellyfin project. YouTube is a trademark of Google LLC. Use it at your own risk.
+
+The server side that ChromaTube configures uses third-party software that is NOT included in this repository:
+- ytdlp2STRM (https://github.com/fe80Grau/ytdlp2STRM), Copyright (c) 2024 fe80grau, MIT License; the Docker
+  image fe80grau/ytdlp2strm is pinned by digest in server/docker-compose.yml and downloaded by Docker.
+- yt-dlp (https://github.com/yt-dlp/yt-dlp), The Unlicense, inside that image.
+Tools of this kind conflict with YouTube's Terms of Service; using them is the user's own choice
+(docs/Before-you-start.md). ChromaTube stores no video and no channel list.
+
+This repository also contains, under their own licences:
+- docs/fonts/: Press Start 2P (CodeMan38) and Silkscreen (The Silkscreen Project Authors), SIL Open Font
+  License 1.1 (LICENSES/OFL-1.1-*.txt), unmodified.
+
+Details: THIRD-PARTY-NOTICES.md and docs/Credits-and-licences.md.
+
+ModRetro and Chromatic are trademarks of ModRetro, Inc. Jellyfin is a trademark of its owners. Analogue
+and Pocket are trademarks of Analogue.
