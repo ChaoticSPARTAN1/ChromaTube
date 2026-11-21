@@ -136,6 +136,7 @@ server/                 docker-compose.yml (pinned digest, limits, read-only set
                         and the tool's other settings templates
 tools/                  PC tools: chromatube_library.py, make_server_config.py, jellyfin_admin.py, tests/
 art/                    the row's icon (original pixel art, the same pixels as the console's)
+promo/                  promo videos and a still picture
 docs/                   the guide (Markdown), pictures, fonts, GitHub Pages copy, PDF guide
 scripts/                documentation builders and their test
 ```
